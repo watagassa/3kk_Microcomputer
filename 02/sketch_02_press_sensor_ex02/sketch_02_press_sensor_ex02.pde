@@ -7,10 +7,11 @@ import cc.arduino.*;
 Arduino arduino;
 PFont myFont;
 int usePin0 = 0;
+int usePin1 = 2; // 光センサのピン
 int ledPin = 13; //LEDのピン(変えるかも)
 String label0 = "array0";
 int[] array0 = new int[0];
-int input0;
+int input0,input1;
 boolean isRecording = false;
 int natCount = 0;
 boolean isPressed = false;
@@ -53,17 +54,13 @@ void draw() {
 
 
   //input0 = arduino.analogRead(usePin0);
+  //input1 = arduino.analogRead(usePin1);
   //arduino.pinMode(ledPin,Arduino.OUTPUT); // ピンを出力に使う
   // 座標15,30に文字表示
-  text("Ain-OuFu" + input0, 15, 30);
+  text("Pas " + input0, 15, 30);
+  text("Lux " + input1, 15, 60);
   noStroke(); //図形の枠線非表示
-  // 座標235,10に長方形を描写
-  rect (235, 10, input0/4, 20);
-  // 線の色を緑に
-  stroke (255, 0, 0);
-  // 垂直線を引く
-  line (235, 5, 235, 125);
-  line (490, 5, 490, 125);
+  
   if (isRecording) {
     // 入力値の記録
     array0 = append(array0, input0);
@@ -90,7 +87,10 @@ void draw() {
   }
   text("isPressed = "+ isPressed,100,100);
   if(isPressed){
-       //arduino.digitalWrite(ledPin, Arduino.HIGH); 
+        if(input1 < 300){
+             //arduino.digitalWrite(ledPin, Arduino.HIGH); 
+    }
+
   }
   
   
