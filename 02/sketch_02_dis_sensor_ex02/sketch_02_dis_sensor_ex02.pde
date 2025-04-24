@@ -12,54 +12,37 @@ int ledPin = 13; //LEDのピン(変えるかも)
 String status = "";
 String label0 = "array0";
 int[] array0 = new int[0];
-int input0,input1;
+int input0, input1;
 boolean isRecording = false;
 // ボタン
 boolean rectOver = false;
 boolean circleOver = false;
 // 使用するセンサの種類
-String[] sensorKind = {"dis","press","photo","non"};
+String[] sensorKind = {"dis", "press", "photo", "non"};
 int sensorIndex = 0;
-
-
-
 
 void setup() {
   size(800, 500);
-  //arduino = new Arduino (this, "/dev/cu.usbserial-14P54818");
+  arduino = new Arduino (this, "/dev/cu.usbserial-14P54818");
   myFont = loadFont("CourierNewPSMT-48.vlw");
   textFont (myFont, 30);
   frameRate (30);
-  
 }
-// キーボードでテストできる
-// inputされているアナログ入力変数をmouseに置き換える
-//
+
 void draw() {
   // グレー(120)
   background(120);
   // 白で塗りつぶし
   fill(255);
 
-  ////ここからコピペして使える
-  text(mouseX, 0, 340);
-  text(mouseY, 0, 380);
-  //長さが変わる線
-  rect(0, 390, mouseX, 10);
-  float amt = float(mouseX) / width;
-  text(lerp(0, 255, amt), 0, 430);
-  input0 = mouseX;
-  //
-
-
-  //input0 = arduino.analogRead(usePin0);
-  //input1 = arduino.analogRead(usePin1);
-  //arduino.pinMode(ledPin,Arduino.OUTPUT); // ピンを出力に使う
+  input0 = arduino.analogRead(usePin0);
+  input1 = arduino.analogRead(usePin1);
+  arduino.pinMode(ledPin,Arduino.OUTPUT); // ピンを出力に使う
   // 座標15,30に文字表示
   text("Pas " + input0, 15, 30);
   text("Lux " + input1, 15, 60);
   noStroke(); //図形の枠線非表示
-  
+
   if (isRecording) {
     // 入力値の記録
     array0 = append(array0, input0);
@@ -75,24 +58,21 @@ void draw() {
     text("Press Esc_key_to_Exit", 40, 180);
     text("Press_any_key_to_Record", 40, 210);
   }
-  
+
   // 不感帯は実験中に設定する
-  if(input0 >= 500){
-    status = "distance";
-  } 
-  if(input0 <= 100){
+  if (input0 >= 400) {
     status = "close";
   }
-  // 一定距離以上近づいたら光る
-  if(status.equals("close")){
-      //arduino.digitalWrite(ledPin, Arduino.HIGH); 
+  if (input0 <= 290) {
+    status = "distant";
   }
-  text(status,50,100);
- buttonUI();
-  
-  
-  
- buttonUI();
+  // 一定距離以上近づいたら光る
+  if (status.equals("close")) {
+    arduino.digitalWrite(ledPin, Arduino.HIGH);
+  } else {
+    arduino.digitalWrite(ledPin, Arduino.LOW);
+  }
+  text(status, 50, 100);
 }
 
 void keyPressed() {

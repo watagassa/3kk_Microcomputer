@@ -16,17 +16,16 @@ String status = "";
 boolean rectOver = false;
 boolean circleOver = false;
 // 使用するセンサの種類
-String[] sensorKind = {"dis","press","photo","non"};
+String[] sensorKind = {"dis", "press", "photo", "non"};
 int sensorIndex = 0;
 
 
 void setup() {
   size(800, 500);
-  //arduino = new Arduino (this, "/dev/cu.usbserial-14P54818");
+  arduino = new Arduino (this, "/dev/cu.usbserial-14P50267");
   myFont = loadFont("CourierNewPSMT-48.vlw");
   textFont (myFont, 30);
   frameRate (30);
-  
 }
 // キーボードでテストできる
 // inputされているアナログ入力変数をmouseに置き換える
@@ -37,18 +36,7 @@ void draw() {
   // 白で塗りつぶし
   fill(255);
 
-  ////ここからコピペして使える
-  text(mouseX, 0, 340);
-  text(mouseY, 0, 380);
-  //長さが変わる線
-  rect(0, 390, mouseX, 10);
-  float amt = float(mouseX) / width;
-  text(lerp(0, 255, amt), 0, 430);
-  input0 = mouseX;
-  //
-
-
-  //input0 = arduino.analogRead(usePin0);
+  input0 = arduino.analogRead(usePin0);
   // 座標15,30に文字表示
   text("Ain-OuFu" + input0, 15, 30);
   noStroke(); //図形の枠線非表示
@@ -74,15 +62,15 @@ void draw() {
     text("Press Esc_key_to_Exit", 40, 180);
     text("Press_any_key_to_Record", 40, 210);
   }
-  // 不感帯は実験中に設定する
-  if(input0 >= 500){
-    status = "distance";
-  } 
-  if(input0 <= 100){
+  // 不感帯の実装
+  if (input0 >= 400) {
     status = "close";
   }
-  text(status,50,100);
- buttonUI();
+  if (input0 <= 290) {
+    status = "distant";
+  }
+  text(status, 50, 100);
+  buttonUI();
 }
 
 void keyPressed() {
