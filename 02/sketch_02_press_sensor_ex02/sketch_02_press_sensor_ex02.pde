@@ -8,7 +8,7 @@ Arduino arduino;
 PFont myFont;
 int usePin0 = 0;
 int usePin1 = 2; // 光センサのピン
-int ledPin = 13; //LEDのピン(変えるかも)
+int ledPin = 13; // LEDのピン
 String label0 = "array0";
 int[] array0 = new int[0];
 int input0, input1;
@@ -75,6 +75,8 @@ void draw() {
   if (input1 > 600) {
     isbright = true;
   }
+
+  // 暗い状況で圧力を検知する場合は光る
   if (!isbright && isPressed) {
     arduino.digitalWrite(ledPin, Arduino.HIGH);
   } else {

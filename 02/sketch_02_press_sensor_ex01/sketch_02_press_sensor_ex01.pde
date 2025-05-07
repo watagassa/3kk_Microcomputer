@@ -86,7 +86,7 @@ int natCounter(int input, int[] natValues ,int prevCount) {
   }
     int diffS = (natValues[0] - natValues[1]) / 3;
     int diffE = (natValues[natValues.length-1] - natValues[natValues.length-2]) / 3;
-  //  最後だけはfor文から抜け出す
+  //  最初と最後だけはfor文から抜け出す
   if(input < natValues[0] - diffS){
     return 0;
   }
