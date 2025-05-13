@@ -1,22 +1,18 @@
-// writeFile
-// command + T でコード整形できる
 import processing.serial.*;
 import cc.arduino.*;
 
 // 変数定義
 Arduino arduino;
 PFont myFont;
-int usePin0 = 0;
-int usePin1 = 2; // 光センサのピン
-int ledPin = 13; // LEDのピン
+int usePin0 = 0; // 焦電センサのピン
+int input0;
+boolean isMove = false; // 動きを検知したかどうか
+int fc = 0; // フレーム数を数える
+
+// csv保存用
 String label0 = "array0";
 int[] array0 = new int[0];
-int input0, input1;
 boolean isRecording = false;
-int natCount = 0;
-boolean isPressed = false;
-boolean isbright = false;
-
 
 
 void setup() {
@@ -36,13 +32,33 @@ void draw() {
   fill(255);
 
   input0 = arduino.analogRead(usePin0);
-  input1 = arduino.analogRead(usePin1);
-  arduino.pinMode(ledPin, Arduino.OUTPUT); // ピンを出力に使う
-  // 座標15,30に文字表示
-  text("Pas " + input0, 15, 30);
-  text("Lux " + input1, 15, 60);
-  noStroke(); //図形の枠線非表示
 
+  // 不感帯等
+  if (input0 < 800) {
+    isMove = true;
+  }
+  if (900 < input0) {
+    isMove = false;
+  }
+  
+  // フレームレートの3倍(3秒)
+  if (fc <= 90 && isMove) {
+    fc++;
+    int y = (fc/10)%3; // 1秒で0,1,2を繰り返す
+    if (y == 0) {
+      text(".", 0, 450);
+    } else if (y == 1) {
+      text("o", 0, 450);
+    } else {
+      text("O", 0, 450);
+    }
+  } else {
+    fc = 0;
+  }
+
+
+  // 座標15,30に文字表示
+  text("pyroelectric = " + input0, 15, 30);
   if (isRecording) {
     // 入力値の記録
     array0 = append(array0, input0);
@@ -57,30 +73,6 @@ void draw() {
     // 記録中でないときは使い方を表示
     text("Press Esc_key_to_Exit", 40, 180);
     text("Press_any_key_to_Record", 40, 210);
-  }
-
-  // 不感帯は実験中に設定する ボルト1
-  if (input0 < 100) {
-    isPressed = false;
-  }
-
-  if (input0 > 300) {
-    isPressed = true;
-  }
-  text("isPressed = "+ isPressed, 100, 100);
-
-  if (input1 < 500) {
-    isbright = false;
-  }
-  if (input1 > 700) {
-    isbright = true;
-  }
-
-  // 暗い状況で圧力を検知する場合は光る
-  if (!isbright && isPressed) {
-    arduino.digitalWrite(ledPin, Arduino.HIGH);
-  } else {
-    arduino.digitalWrite(ledPin, Arduino.LOW);
   }
 }
 

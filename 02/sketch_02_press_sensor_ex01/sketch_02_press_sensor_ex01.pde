@@ -19,7 +19,7 @@ int count = 0;
 
 void setup() {
   size(800, 500);
-  // arduino = new Arduino (this, "/dev/cu.usbserial-14P54818");
+  arduino = new Arduino (this, "/dev/cu.usbserial-14P54818");
   myFont = loadFont("CourierNewPSMT-48.vlw");
   textFont (myFont, 30);
   frameRate (30);
@@ -33,16 +33,16 @@ void draw() {
   // 白で塗りつぶし
   fill(255);
 
-  ////ここからコピペして使える
-  text(mouseX, 0, 340);
-  text(mouseY, 0, 380);
-  //長さが変わる線
-  rect(0, 390, mouseX, 10);
-  float amt = float(mouseX) / width;
-  text(lerp(0, 255, amt), 0, 430);
-  input0 = mouseX;
+  //////ここからコピペして使える
+  //text(mouseX, 0, 340);
+  //text(mouseY, 0, 380);
+  ////長さが変わる線
+  //rect(0, 390, mouseX, 10);
+  //float amt = float(mouseX) / width;
+  //text(lerp(0, 255, amt), 0, 430);
+  //input0 = mouseX;
   //
-  // input0 = arduino.analogRead(usePin0);
+  input0 = arduino.analogRead(usePin0);
   // 座標15,30に文字表示
   text("Ain-OuFu" + input0, 15, 30);
   noStroke(); //図形の枠線非表示
@@ -68,12 +68,12 @@ void draw() {
     text("Press Esc_key_to_Exit", 40, 180);
     text("Press_any_key_to_Record", 40, 210);
   }
-  count = natCounter(input0, arrayValue,count);
+  count = natCounter(input0, arrayValue, count);
   text("count = "+ count, 100, 100);
 }
 
 // natの数を数える関数
-int natCounter(int input, int[] natValues ,int prevCount) {
+int natCounter(int input, int[] natValues, int prevCount) {
 
   for (int i=1; i<natValues.length-1; i++) {
     int diff0 = (natValues[i] - natValues[i - 1]) / 3;
@@ -84,13 +84,13 @@ int natCounter(int input, int[] natValues ,int prevCount) {
       return i;
     }
   }
-    int diffS = (natValues[0] - natValues[1]) / 3;
-    int diffE = (natValues[natValues.length-1] - natValues[natValues.length-2]) / 3;
+  int diffS = (natValues[0] - natValues[1]) / 3;
+  int diffE = (natValues[natValues.length-1] - natValues[natValues.length-2]) / 3;
   //  最初と最後だけはfor文から抜け出す
-  if(input < natValues[0] - diffS){
+  if (input < natValues[0] - diffS) {
     return 0;
   }
-  if(input > natValues[natValues.length-1] - diffE){
+  if (input > natValues[natValues.length-1] - diffE) {
     return natValues.length-1;
   }
   // 不感帯の場合は前の入力が戻り値

@@ -14,19 +14,11 @@ int[] array0 = new int[0];
 int input0;
 boolean isRecording = false;
 int natCount = 0;
-// ボタン
-boolean rectOver = false;
-boolean circleOver = false;
-// 使用するセンサの種類
-String[] sensorKind = {"dis", "press", "photo", "non"};
-int sensorIndex = 0;
-
-
 
 
 void setup() {
   size(800, 500);
-  //arduino = new Arduino (this, "/dev/cu.usbserial-14P54818");
+  arduino = new Arduino (this, "/dev/cu.usbserial-14P54818");
   myFont = loadFont("CourierNewPSMT-48.vlw");
   textFont (myFont, 30);
   frameRate (30);
@@ -40,19 +32,8 @@ void draw() {
   // 白で塗りつぶし
   fill(255);
 
-  ////ここからコピペして使える
-  text(mouseX, 0, 340);
-  text(mouseY, 0, 380);
-  //長さが変わる線
-  rect(0, 390, mouseX, 10);
-  float amt = float(mouseX) / width;
-  text(lerp(0, 255, amt), 0, 430);
-  input0 = mouseX;
-  //
-
-
-  //input0 = arduino.analogRead(usePin0);
-  //arduino.pinMode(ledPin,Arduino.OUTPUT); // ピンを出力に使う
+  input0 = arduino.analogRead(usePin0);
+  arduino.pinMode(ledPin, Arduino.OUTPUT); // ピンを出力に使う
   // 座標15,30に文字表示
   text("Ain-OuFu" + input0, 15, 30);
   noStroke(); //図形の枠線非表示
@@ -80,34 +61,34 @@ void draw() {
   }
 
   // 不感帯は実験中に設定する
-  if (input0 < 100) {
+  if (input0 < 450) {
     wgbColor = "white";
   }
-  if (input0 > 200 && input0 < 300) {
+  if (input0 > 500 && input0 < 850) {
     wgbColor = "grey";
   }
-  if (input0 > 600) {
+  if (input0 > 900) {
     wgbColor = "black";
   }
   text(wgbColor, 100, 100);
-  buttonUI();
 
   int sec = second();
-  // ずっと　2sごと、3sごとに表示
+  // ずっと　1sごと、2sごとに表示
   if (wgbColor.equals("white")) {
-    //arduino.digitalWrite(ledPin, Arduino.HIGH);
+    arduino.digitalWrite(ledPin, Arduino.HIGH);
   } else if (wgbColor.equals("grey")) {
     if (sec % 2 == 0) {
-      //arduino.digitalWrite(ledPin, Arduino.HIGH);
+      arduino.digitalWrite(ledPin, Arduino.HIGH);
+    } else {
+      arduino.digitalWrite(ledPin, Arduino.LOW);
     }
   } else if (wgbColor.equals("black")) {
     if (sec % 3 == 0) {
-      //arduino.digitalWrite(ledPin, Arduino.HIGH);
+      arduino.digitalWrite(ledPin, Arduino.HIGH);
+    } else {
+      arduino.digitalWrite(ledPin, Arduino.LOW);
     }
   }
-
-
-  buttonUI();
 }
 
 void keyPressed() {
@@ -119,7 +100,7 @@ void keyPressed() {
       lines[i+1] = (i+1) + "," + array0[i];
     }
     // ファイル名の作成
-    String filename = "Rec_"+sensorKind[sensorIndex]+"_"+ year() + nf(month(), 2) + nf(day(), 2) + "_" +nf(hour(), 2) + nf(minute(), 2) + nf(second(), 2) + ".csv";
+    String filename = "Rec_"+ year() + nf(month(), 2) + nf(day(), 2) + "_" +nf(hour(), 2) + nf(minute(), 2) + nf(second(), 2) + ".csv";
     // ファイルの書き出し
     saveStrings (filename, lines);
     // 初期化

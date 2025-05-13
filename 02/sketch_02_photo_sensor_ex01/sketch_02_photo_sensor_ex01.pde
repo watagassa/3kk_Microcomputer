@@ -9,16 +9,10 @@ PFont myFont;
 int usePin0 = 0;
 String label0 = "array0";
 int[] array0 = new int[0];
+String wgbColor = "";
 int input0;
 boolean isRecording = false;
 String status = "";
-// ボタン
-boolean rectOver = false;
-boolean circleOver = false;
-// 使用するセンサの種類
-String[] sensorKind = {"dis", "press", "photo", "non"};
-int sensorIndex = 0;
-
 
 void setup() {
   size(800, 500);
@@ -62,13 +56,17 @@ void draw() {
     text("Press Esc_key_to_Exit", 40, 180);
     text("Press_any_key_to_Record", 40, 210);
   }
-  // 不感帯の実装
-  if (input0 >= 400) {
-    status = "close";
+  // 不感帯は実験中に設定する
+  if (input0 < 450) {
+    wgbColor = "white";
   }
-  if (input0 <= 290) {
-    status = "distant";
+  if (input0 > 500 && input0 < 850) {
+    wgbColor = "grey";
   }
+  if (input0 > 900) {
+    wgbColor = "black";
+  }
+  text(wgbColor, 100, 100);
   text(status, 50, 100);
 }
 
@@ -81,7 +79,7 @@ void keyPressed() {
       lines[i+1] = (i+1) + "," + array0[i];
     }
     // ファイル名の作成
-    String filename = "Rec_"+sensorKind[sensorIndex]+"_"+ year() + nf(month(), 2) + nf(day(), 2) + "_" +nf(hour(), 2) + nf(minute(), 2) + nf(second(), 2) + ".csv";
+    String filename = "Rec_"+ year() + nf(month(), 2) + nf(day(), 2) + "_" +nf(hour(), 2) + nf(minute(), 2) + nf(second(), 2) + ".csv";
     // ファイルの書き出し
     saveStrings (filename, lines);
     // 初期化
