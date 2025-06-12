@@ -16,7 +16,7 @@ int[] array1 = new int[0];
 int[] array2 = new int[0];
 
 int inputX, inputY, inputZ;
-
+int stopFC = 0;
 // o の座標
 float posX, posY;
 
@@ -37,15 +37,15 @@ void draw() {
   //inputX = arduino.analogRead(usePin0);
   //inputY = arduino.analogRead(usePin1);
   //inputZ = arduino.analogRead(usePin2);
-  
+
   //ここからコピペして使える
   inputX = mouseX * 1024 / width;
   inputY = mouseY *1024 / height;
   inputZ = mouseY *1024 / width;
   //
-  
-  
-  
+
+
+
   background(120);
   fill(255);
   text("x = " + inputX, 15, 30);
@@ -60,11 +60,15 @@ void draw() {
   stroke(255, 0, 0);
   line(235, 5, 235, 125);
   line(490, 5, 490, 125);
-  
+
   // o を描画
-  posX = inputX / 2;
-  posY = inputY / 2;
-  ellipse(posX, posY, 10, 10);
+  posX = width / 2 + (inputX   - 512)/2;
+  posY = height / 2 + (inputY  - 512)/2;
+  
+  ellipse(posX,posY, 10, 10);
+    // 十字
+  line(width / 2 - 10, height / 2, width / 2 + 10, height / 2);
+  line(width / 2, height / 2 - 10, width / 2, height / 2 + 10);
 
   if (isRecording) {
     // 入力値の記録

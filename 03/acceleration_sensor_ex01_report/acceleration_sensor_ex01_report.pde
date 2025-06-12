@@ -35,29 +35,11 @@ void draw() {
   inputX = arduino.analogRead(usePin0);
   inputY = arduino.analogRead(usePin1);
   inputZ = arduino.analogRead(usePin2);
-  
-  background(120);
-  fill(255);
-  text("x = " + inputX, 15, 30);
-  text("y = " + inputY, 15, 60);
-  text("z = " + inputZ, 15, 90);
 
-  noStroke();
-  rect(235, 10, inputX / 4, 20);
-  rect(235, 40, inputY / 4, 20);
-  rect(235, 70, inputZ / 4, 20);
-
-  stroke(255, 0, 0);
-  line(235, 5, 235, 125);
-  line(490, 5, 490, 125);
-  
   // o を描画
   posX = width / 2 -(inputX - 512)/2;
   posY = height / 2 + (inputY  - 512)/2;
-  
-  ellipse(posX,posY, 10, 10);
-    // 十字
+  ellipse(posX, posY, 10, 10);
   line(width / 2 - 10, height / 2, width / 2 + 10, height / 2);
   line(width / 2, height / 2 - 10, width / 2, height / 2 + 10);
-  ellipse(posX, posY, 10, 10);
 }

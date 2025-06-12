@@ -7,6 +7,7 @@ PFont myFont;
 int usePin0 = 0; // 焦電センサのピン
 int input0;
 boolean isMove = false; // 動きを検知したかどうか
+int size = 0;
 int fc = 0; // フレーム数を数える
 
 // csv保存用
@@ -34,26 +35,37 @@ void draw() {
   input0 = arduino.analogRead(usePin0);
 
   // 不感帯等
-  if (input0 < 800) {
+  if (input0 > 900) {
     isMove = true;
   }
-  if (900 < input0) {
+  if (700 > input0) {
     isMove = false;
   }
-  
+
   // フレームレートの3倍(3秒)
   if (fc <= 90 && isMove) {
     fc++;
     int y = (fc/10)%3; // 1秒で0,1,2を繰り返す
     if (y == 0) {
-      text(".", 0, 450);
+      size = 0;
     } else if (y == 1) {
-      text("o", 0, 450);
+      size = 1;
     } else {
-      text("O", 0, 450);
+      size = 2;
     }
   } else {
     fc = 0;
+  }
+  switch(size) {
+  case 0:
+    text(".", 0, 450);
+    break;
+  case 1:
+    text("o", 0, 450);
+    break;
+  case 2:
+    text("O", 0, 450);
+    break;
   }
 
 

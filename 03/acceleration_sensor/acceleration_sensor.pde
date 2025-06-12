@@ -17,16 +17,10 @@ int[] array2 = new int[0];
 
 int inputX, inputY, inputZ;
 
-// o の座標
-float posX, posY;
-
 void setup() {
   size(640, 480);
   arduino = new Arduino (this, "/dev/cu.usbserial-14P54818");
   frameRate (30);
-  // 初期位置を画面中央に
-  posX = width / 2;
-  posY = height / 2;
 }
 
 void draw() {
@@ -50,14 +44,4 @@ void draw() {
   stroke(255, 0, 0);
   line(235, 5, 235, 125);
   line(490, 5, 490, 125);
-  
-  // o を描画
-  posX = width / 2 -(inputX - 512)/2;
-  posY = height / 2 + (inputY  - 512)/2;
-  
-  ellipse(posX,posY, 10, 10);
-    // 十字
-  line(width / 2 - 10, height / 2, width / 2 + 10, height / 2);
-  line(width / 2, height / 2 - 10, width / 2, height / 2 + 10);
-  ellipse(posX, posY, 10, 10);
 }

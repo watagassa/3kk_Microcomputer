@@ -37,12 +37,12 @@ void draw() {
   arduino.pinMode(ledPin, Arduino.OUTPUT); // ピンを出力に使う
 
   // 不感帯等
-  if (input0 < 800) {
+  if (input0 > 700) {
     isMove = true;
     ledOn = true;
     arduino.digitalWrite(ledPin, Arduino.HIGH);
   }
-  if (900 < input0) {
+  if (500 > input0) {
     isMove = false;
   }
 
