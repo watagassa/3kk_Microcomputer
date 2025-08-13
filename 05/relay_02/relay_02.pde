@@ -18,11 +18,20 @@ void setup() {
   // 初期状態で両方のピンをLOWに設定
   arduino.digitalWrite(OnOffPin, Arduino.LOW);
   arduino.digitalWrite(DirPin, Arduino.LOW);
+    myFont = loadFont("CourierNewPSMT-48.vlw");
 }
 
 void draw() {
-  myFont = loadFont("CourierNewPSMT-48.vlw");
+  background(255);
+   fill(0); 
   textFont (myFont, 30);
+  // 各種ステータスを行間をあけて表示
+  text("On/Off: " + (OnOffState ? "ON" : "OFF"), 50, 150);
+  text("R/L: " + (DirState ? "R" : "L"), 50, 200);
+  //arduino.digitalWrite(OnOffPin, Arduino.HIGH);
+  //delay(1000);
+  //arduino.digitalWrite(OnOffPin, Arduino.LOW);
+
 }
 void mousePressed() {
   // On Offの切り替え
